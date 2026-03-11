@@ -101,7 +101,11 @@ def get_ai_decisions(system_prompt: str, portfolio: dict, market_data: dict) -> 
     )
 
     content = message.content[0].text
-    parsed = json.loads(content)
+    try:
+        parsed = json.loads(content)
+    except (json.JSONDecodeError, TypeError):
+        print("ERROR: AI failed to return valid JSON. Skipping trades.")
+        return []
     return parsed.get("trades", [])
 
 
